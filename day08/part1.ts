@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import Puter from "./puter";
 
 const ROOT_DIR="day08";
 
@@ -8,9 +9,12 @@ function readFile(fileName: string): string {
 }
 
 console.log("==== PART 1 ====");
-let contents = readFile(`${ROOT_DIR}/test-input.txt`);
+//let contents = readFile(`${ROOT_DIR}/test-input.txt`);
+let contents = readFile(`${ROOT_DIR}/input.txt`);
 
+let puter = new Puter(contents.split("\n"));
+console.log(`Accumulator: ${puter.run()}`);
+console.log(`Infinite: ${puter.infinite}`);
 
 console.log("==== PART 2 ====");
-contents = readFile(`${ROOT_DIR}/input.txt`);
-
+console.log(`Accumulator: ${puter.fix()}`);
