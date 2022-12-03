@@ -13,22 +13,24 @@ let contents = readFile(`${ROOT_DIR}/input.txt`);
 
 console.log("==== PART 1 ====");
 
-// split the contents of the file by empty lines
-let elfInventory = contents.split("\n\n");
-console.log("elves", elfInventory.length);
-
-let elves = elfInventory.map((elf) => {
-    let caloryStrings = elf.split("\n");
-    // convert each line to an array of numbers
-    let calories = caloryStrings.map(c => parseInt(c));
-    let total = calories.reduce((a, b) => a + b, 0);
-
-    return { 
-        calories: calories,
-        total: total
-    };
-}).sort((a, b) => a.total - b.total).reverse();
-console.log("Most calories: ", elves[0].total);
+let nums = contents.split("\n");
+for (let i = 0; i < nums.length; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+        if (i !== j && parseInt(nums[i]) + parseInt(nums[j]) === 2020) {
+            console.log(parseInt(nums[i]) * parseInt(nums[j]));
+            break;
+        }
+    }
+}
 
 console.log("==== PART 2 ====");
-console.log("Most calories top 3 elves: ", elves.slice(0, 3).reduce((a, b) => a + b.total, 0));
+for (let i = 0; i < nums.length; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+        for (let k = j + 1; k < nums.length; k++) {
+            if (parseInt(nums[i]) + parseInt(nums[j]) + parseInt(nums[k]) === 2020) {
+                console.log(parseInt(nums[i]) * parseInt(nums[j]) * parseInt(nums[k]));
+                break;
+            }
+        }
+    }
+}
