@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { Sack, getScore } from "./sack";
 
 const ROOT_DIR="day03";
 
