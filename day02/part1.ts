@@ -7,22 +7,39 @@ function readFile(fileName: string): string {
     return fs.readFileSync(fileName, "utf8");
 }
 
-let scoreMap = new Map<string, number>();
-scoreMap.set("A X", 3 + 1);
-scoreMap.set("A Y", 6 + 2);
-scoreMap.set("A Z", 0 + 3);
+class Password {
+    constructor(public min: number, public max: number, public letter: string, public password: string) {
+    }
 
-scoreMap.set("B X", 0 + 1);
-scoreMap.set("B Y", 3 + 2);
-scoreMap.set("B Z", 6 + 3);
+    isValidPart1(): boolean {
+        let count = 0;
+        for (let i = 0; i < this.password.length; i++) {
+            if (this.password[i] === this.letter) {
+                count++;
+            }
+        }
+        return count >= this.min && count <= this.max;
+    }
 
-scoreMap.set("C X", 6 + 1);
-scoreMap.set("C Y", 0 + 2);
-scoreMap.set("C Z", 3 + 3);
+    isValidPart2(): boolean {
+       return (this.password[this.min - 1] === this.letter) !== (this.password[this.max - 1] === this.letter);
+    }
+}
 
 console.log("==== PART 1 ====");
 let contents = readFile(`${ROOT_DIR}/input.txt`);
 
-let lines = contents.split("\n");
-let score = lines.reduce((sum, line) => sum += scoreMap.get(line)!, 0);
-console.log("Score: " + score);
+let passwords = contents.split("\n").map(line => {
+    let parts = line.split(" ");
+    let minMax = parts[0].split("-");
+    let min = parseInt(minMax[0]);
+    let max = parseInt(minMax[1]);
+    let letter = parts[1][0];
+    let password = parts[2];
+    return new Password(min, max, letter, password);
+});
+
+console.log(`Valid: ${passwords.filter(p => p.isValidPart1()).length}`);
+
+console.log("==== PART 2 ====");
+console.log(`Valid: ${passwords.filter(p => p.isValidPart2()).length}`);
