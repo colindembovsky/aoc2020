@@ -15,12 +15,7 @@ console.log("==== PART 1 ====");
 let seatMap = new SeatMap(lines);
 do {
     seatMap.iterate();
-    seatMap.print();
-    console.log("====");
 } while (seatMap.mapChanged());
-
-seatMap.print();
-
 console.log(`Occupied seats: ${seatMap.occupiedCount()}`);
 
 //console.log("==== PART 2 ====");
