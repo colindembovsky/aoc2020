@@ -14,10 +14,13 @@ let lines = contents.split("\n");
 console.log("==== PART 1 ====");
 let seatMap = new SeatMap(lines);
 do {
-    seatMap.iterate();
+    seatMap.iteratePart1();
 } while (seatMap.mapChanged());
 console.log(`Occupied seats: ${seatMap.occupiedCount()}`);
 
-//console.log("==== PART 2 ====");
-//contents = readFile(`${ROOT_DIR}/input.txt`);
-
+console.log("==== PART 2 ====");
+seatMap = new SeatMap(lines);
+do {
+    seatMap.iteratePart2();
+} while (seatMap.mapChanged());
+console.log(`Occupied seats: ${seatMap.occupiedCount()}`);

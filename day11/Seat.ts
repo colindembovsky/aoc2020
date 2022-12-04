@@ -24,13 +24,53 @@ class Seat {
         return occupiedSeats;
     }
 
-    setNewState(): void {
+    setNewStatePart1(): void {
         this.previousState = this.state;
         if (this.state === "L" && this.getAdjacentOccupiedSeats() === 0) {
             this.state = "#";
         } else if (this.state === "#" && this.getAdjacentOccupiedSeats() >= 4) {
             this.state = "L";
         }
+    }
+
+    setNewStatePart2(): void {
+        this.previousState = this.state;
+        if (this.state === "L" && this.getVisibleOccupiedSeats() === 0) {
+            this.state = "#";
+        } else if (this.state === "#" && this.getVisibleOccupiedSeats() >= 5) {
+            this.state = "L";
+        }
+    }
+
+    getVisibleOccupiedSeats(): number {
+        let occupiedSeats = 0;
+        // get seats in each direction
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(0, -1); // left
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(0, 1); // right
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(-1, 0); // up
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(1, 0); // down
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(-1, -1); // up-left
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(-1, 1); // up-right
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(1, -1); // down-left
+        occupiedSeats += this.getVisibleOccupiedSeatsInDirection(1, 1); // down-right
+        return occupiedSeats;
+    }
+
+    getVisibleOccupiedSeatsInDirection(rowDir: number, colDir: number): number {
+        let row = this.row + rowDir;
+        let col = this.col + colDir;
+        let s = this.map.get(row, col);
+        while (s) {
+            if (s.previousState === "#") {
+                return 1;
+            } else if (s.previousState === "L") {
+                return 0;
+            }
+            row += rowDir;
+            col += colDir;
+            s = this.map.get(row, col);
+        }
+        return 0;
     }
 
     changed(): boolean {
@@ -72,9 +112,14 @@ class SeatMap {
         return this.map.reduce((acc, row) => acc + row.reduce((rcc, seat) => rcc + (seat.state === "#" ? 1 : 0), 0), 0);
     }
 
-    public iterate(): void {
+    public iteratePart1(): void {
         this.map.forEach(row => row.forEach(seat => seat.reset()));
-        this.map.forEach(row => row.forEach(seat => seat.setNewState()));
+        this.map.forEach(row => row.forEach(seat => seat.setNewStatePart1()));
+    }
+
+    public iteratePart2(): void {
+        this.map.forEach(row => row.forEach(seat => seat.reset()));
+        this.map.forEach(row => row.forEach(seat => seat.setNewStatePart2()));
     }
 
     print(): void {
