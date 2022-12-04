@@ -32,6 +32,24 @@ class XMAS {
         }
         return false;
     }
+
+    public findEncryptionWeakness(): number {
+        const invalidNumber = this.findInvalidNumber();
+        for (let i = 0; i < this.data.length; i++) {
+            let sum = this.data[i];
+            for (let j = i + 1; j < this.data.length; j++) {
+                sum += this.data[j];
+                if (sum === invalidNumber) {
+                    const range = this.data.slice(i, j);
+                    return Math.min(...range) + Math.max(...range);
+                }
+                if (sum > invalidNumber) {
+                    break;
+                }
+            }
+        }
+        throw new Error("No encryption weakness found");
+    }
 }
 
 //let contents = readFile(`${ROOT_DIR}/test-input.txt`);
@@ -43,4 +61,5 @@ let xmas1 = new XMAS(25, nums);
 console.log(xmas1.findInvalidNumber());
 
 console.log("==== PART 2 ====");
-
+let xmas2 = new XMAS(25, nums);
+console.log(xmas2.findEncryptionWeakness());
